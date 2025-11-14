@@ -4,7 +4,7 @@
         stage('checkout'){
             steps{
                 echo "*********** cloning the code **********"
-                sh 'rm -rf Calci || true'
+                sh 'rm -rf calci || true'
                 sh 'git clone  https://github.com/Akash2345ind/calci.git'     
             }
         }
