@@ -3,32 +3,35 @@
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-creds')
     }
-    stages{
-        stage('checkout'){
-            steps{
+    stages {
+        stage('checkout') {
+            steps {
                 echo "*********** cloning the code **********"
                 sh 'rm -rf Calci || true'
-                sh 'git clone  https://github.com/Siva825/Calci.git'     
+                sh 'git clone https://github.com/Siva825/Calci.git'     
             }
         }
-        stage('Artifact build'){
-            steps{
+        
+        stage('Artifact build') {
+            steps {
                 echo "********** building is done ************"
-                dir('Calci/calculator'){
-                    sh'mvn clean package -DskipTests -Dcyclonedx.skip=true -Dcheckstyle.skip=true'
+                dir('Calci/calculator') {
+                    sh 'mvn clean package -DskipTests -Dcyclonedx.skip=true -Dcheckstyle.skip=true'
                 }
             }
         }
-    }
+        
         stage('Prepare for Docker Build') {
             steps {
                 dir('Calci/calculator/target') {
                     stash name: 'java-artifact', includes: 'calculator-0.0.1-SNAPSHOT.jar'
                 }
                 dir('Calci/calculator') {
-                     stash name: 'Dockerfile', includes: 'Calci/calculator/'
+                    stash name: 'Dockerfile', includes: 'Dockerfile'
+                }
             }
         }
+        
         stage('Build Docker Image') {
             agent { 
                 label 'java-slave'
@@ -40,19 +43,17 @@
                 sh 'docker build -t siva2626/calculator:v1 .'
             }
         }
+        
         stage('Push to Docker Hub') {
             agent { 
                 label 'java-slave'
-           } 
+            } 
             steps {
-               sh """
+                sh """
                 docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}
                 docker push siva2626/calculator:v1
                 """
             }
-        }   
+        }
     }
- }
-    
-
-
+}
