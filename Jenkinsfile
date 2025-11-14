@@ -1,19 +1,25 @@
-pipeline {
+ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-creds')
     }
-    stages {
-        stage('Build Java Artifact') {
-            steps {
+    stages{
+        stage('checkout'){
+            steps{
+                echo "*********** cloning the code **********"
                 sh 'rm -rf spring-petclinic || true'
-                sh 'git clone https://github.com/Siva825/spring-petclinic.git'
-                dir 'spring-petclinic' {
-                sh 'mvn clean package -DskipTests'
+                sh 'git clone https://github.com/Siva825/spring-petclinic.git'     
+            }
+        }
+        stage('build'){
+            steps{
+                echo "********** building is done ************"
+                dir('spring-petclinic'){
+                    sh'mvn clean package -DskipTests -Dcyclonedx.skip=true'
                 }
             }
         }
-        stage('Build and Push Docker Image') {
+        stage('Build Docker Image') {
             agent { 
                 label 'java-slave'
             } 
