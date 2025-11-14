@@ -38,14 +38,9 @@
             } 
             steps {
                 // Unstash artifacts on the slave node
-               dir('/home/sivapk188') {
                     unstash 'java-artifact'
                     unstash 'Dockerfile'
-                    
-                    // Build Docker image
-                    sh '''
-                    sudo docker build -t siva2626/calculator:v1 .
-                    '''
+                    sh 'sudo docker build -t siva2626/calculator:v1 .'
                 }
             }
         }
@@ -62,4 +57,4 @@
             }
         }
     }
-}
+} 
