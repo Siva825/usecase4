@@ -5,13 +5,13 @@
             steps{
                 echo "*********** cloning the code **********"
                 sh 'rm -rf Calci || true'
-                sh 'git clone  https://github.com/Siva825/Calci.git'     
+                sh 'git clone  https://github.com/Akash2345ind/calci.git'     
             }
         }
         stage('Artifact build'){
             steps{
                 echo "********** building is done ************"
-                dir('Calci/calculator'){
+                dir('calci'){
                     sh'mvn clean package -DskipTests -Dcyclonedx.skip=true -Dcheckstyle.skip=true'
                 }
             }
