@@ -1,4 +1,4 @@
- pipeline {
+  pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-creds')
@@ -24,8 +24,9 @@
             steps {
                 dir('Calci/calculator/target') {
                     stash name: 'java-artifact', includes: 'calculator-0.0.1-SNAPSHOT.jar'
-                    stash name: 'Dockerfile', includes: 'Calci/calculator/Dockerfile'
                 }
+                dir('Calci/calculator') {
+                     stash name: 'Dockerfile', includes: 'Calci/calculator/'
             }
         }
         stage('Build Docker Image') {
@@ -51,6 +52,7 @@
             }
         }   
     }
+ }
     
 
 
