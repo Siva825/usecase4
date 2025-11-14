@@ -38,10 +38,9 @@
             } 
             steps {
                 // Unstash artifacts on the slave node
-                    unstash 'java-artifact'
-                    unstash 'Dockerfile'
-                    sh 'sudo docker build -t siva2626/calculator:v1 .'
-                }
+                unstash 'java-artifact'
+                unstash 'Dockerfile'
+                sh 'docker build -t siva2626/calculator:v1 .'
             }
         }
         
@@ -51,10 +50,10 @@
             } 
             steps {
                 sh """
-                sudo docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}
-                sudo docker push siva2626/calculator:v1
+                docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}
+                docker push siva2626/calculator:v1
                 """
             }
         }
     }
-} 
+}
