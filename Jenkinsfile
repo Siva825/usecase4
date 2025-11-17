@@ -34,7 +34,7 @@
         
         stage('Build Docker Image') {
             agent { 
-                label 'java-slave'
+                label 'j-slave'
             } 
             steps {
                 // Unstash artifacts on the slave node
@@ -46,7 +46,7 @@
         
         stage('Push to Docker Hub') {
             agent { 
-                label 'java-slave'
+                label 'j-slave'
             } 
             steps {
                 sh """
